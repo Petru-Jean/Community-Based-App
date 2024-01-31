@@ -22,34 +22,23 @@ import java.util.List;
 @Service
 public class PostService
 {
-    private final CommunityRepository communityRepository;
     private final PostRepository      postRepository;
 
     @Autowired
-    public PostService(CommunityRepository communityRepository, PostRepository postRepository)
+    public PostService(PostRepository postRepository)
     {
-        this.communityRepository = communityRepository;
         this.postRepository = postRepository;
     }
 
-    public List<PostDTO> getPostsByCommunityName(String name, int pageNumber, HttpServletResponse response)
+    public List<PostDTO> getPosts(int communityId, int pageNumber)
     {
-        Community community = communityRepository.findByName(name);
-
-        if(community == null)
-        {
-            response.setStatus(ExpiresFilter.XHttpServletResponse.SC_NOT_FOUND);
-
-            return List.of();
-        }
-
         pageNumber = Math.max(pageNumber, 0);
 
         Pageable pageable = PageRequest.of(pageNumber, 25);
 
         return PostMapper.INSTANCE.map(
                 postRepository.findAllByCommunityId(
-                community.getId(),
+                communityId,
                 pageable));
     }
 
