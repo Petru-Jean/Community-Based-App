@@ -1,9 +1,9 @@
 package org.springprojects.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Community
@@ -12,8 +12,19 @@ public class Community
     private int id;
 
     private String name;
-
     private String description;
+
+    @OneToMany(mappedBy = "community")
+    @JsonIgnore
+    private List<Post> posts;
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 
     public int getId() {
         return id;

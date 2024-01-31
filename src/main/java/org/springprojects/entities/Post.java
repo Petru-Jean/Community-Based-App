@@ -13,7 +13,10 @@ public class Post
     private String content;
 
     @ManyToOne
+    @JoinColumn(name = "community_id")
     private Community community;
+
+        
 
     public int getId() {
         return id;
