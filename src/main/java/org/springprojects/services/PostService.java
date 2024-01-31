@@ -1,5 +1,7 @@
 package org.springprojects.services;
 
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springprojects.dto.PostDTO;
 import org.springprojects.entities.Community;
 import org.springprojects.entities.Post;
+import org.springprojects.mapper.PostMapper;
 import org.springprojects.repositories.CommunityRepository;
 import org.springprojects.repositories.PostRepository;
 
@@ -28,24 +32,25 @@ public class PostService
         this.postRepository = postRepository;
     }
 
-    public ResponseEntity<?> getPostsByCommunityName(String name, int pageNumber)
+    public List<PostDTO> getPostsByCommunityName(String name, int pageNumber, HttpServletResponse response)
     {
         Community community = communityRepository.findByName(name);
 
         if(community == null)
         {
-            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+            response.setStatus(ExpiresFilter.XHttpServletResponse.SC_NOT_FOUND);
+
+            return List.of();
         }
 
-        if(pageNumber < 0) pageNumber = 0;
+        pageNumber = Math.max(pageNumber, 0);
 
         Pageable pageable = PageRequest.of(pageNumber, 25);
 
-        List<Post> posts = postRepository.findAllByCommunityId(
+        return PostMapper.INSTANCE.map(
+                postRepository.findAllByCommunityId(
                 community.getId(),
-                pageable);
-
-        return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
+                pageable));
     }
 
 }
