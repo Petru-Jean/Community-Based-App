@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import org.antlr.v4.runtime.misc.NotNull;
+import org.springframework.validation.annotation.*;
+
 @Entity
 public class Community
 {
