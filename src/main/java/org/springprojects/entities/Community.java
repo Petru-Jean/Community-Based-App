@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.validation.annotation.*;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
+
 
 @Entity
 public class Community
@@ -14,7 +15,12 @@ public class Community
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull @NotBlank
+    @Length(min = 3, max = 21)
+    @Pattern(regexp = "^[A-Za-z0-9_.-]+$")
     private String name;
+
+    @Length(max = 512)
     private String description;
 
     @OneToMany(mappedBy = "community")

@@ -1,6 +1,9 @@
 package org.springprojects.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 public class Post
@@ -9,7 +12,11 @@ public class Post
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull @NotBlank
+    @Length(min = 1, max = 300)
     private String title;
+
+    @Length(max = 40000)
     private String content;
 
     @ManyToOne
