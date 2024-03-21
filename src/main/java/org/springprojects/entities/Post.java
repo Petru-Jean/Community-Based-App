@@ -16,7 +16,7 @@ public class Post
     @Length(min = 1, max = 300)
     private String title;
 
-    @Length(max = 40000)
+    @Length(max = 65535)
     private String content;
 
     @ManyToOne

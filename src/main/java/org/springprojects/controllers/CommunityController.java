@@ -2,11 +2,12 @@ package org.springprojects.controllers;
 
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springprojects.dto.PostDTO;
+import org.springprojects.entities.Post;
 import org.springprojects.services.CommunityService;
 import org.springprojects.services.PostService;
 import org.springprojects.entities.Community;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/community")
+@RequestMapping("/api/v1/community")
 public class CommunityController
 {
     private final CommunityService communityService;
@@ -29,13 +30,13 @@ public class CommunityController
     }
 
     @PostMapping("/create")
-    public String createCommunity(@RequestBody Community community)
+    public String createCommunity(@Valid @RequestBody Community community)
     {
         return "Success: " + community.getName();
     }
 
     @GetMapping("/{communityName}/posts/{pageNumber}")
-    public List<PostDTO> getPosts(@PathVariable String communityName, @PathVariable int pageNumber, HttpServletResponse response)
+    public List<Post> getPosts(@PathVariable String communityName, @PathVariable int pageNumber, HttpServletResponse response)
     {
         Community community = communityService.findByName(communityName);
 

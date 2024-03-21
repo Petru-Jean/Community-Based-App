@@ -23,7 +23,7 @@ public class User
     @NotNull @NotBlank @Length(min = 3, max = 21)
     private String name;
 
-    @NotNull @NotBlank @Length(min = 128, max = 128)
+    @NotNull @NotBlank
     private String password;
 
     @Email

@@ -15,7 +15,7 @@ public class Community
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull @NotBlank
+    @NotNull @NotBlank 
     @Length(min = 3, max = 21)
     @Pattern(regexp = "^[A-Za-z0-9_.-]+$")
     private String name;

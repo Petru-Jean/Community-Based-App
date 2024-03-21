@@ -10,10 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springprojects.dto.PostDTO;
 import org.springprojects.entities.Community;
 import org.springprojects.entities.Post;
-import org.springprojects.mapper.PostMapper;
 import org.springprojects.repositories.CommunityRepository;
 import org.springprojects.repositories.PostRepository;
 
@@ -30,16 +28,14 @@ public class PostService
         this.postRepository = postRepository;
     }
 
-    public List<PostDTO> getPosts(int communityId, int pageNumber)
+    public List<Post> getPosts(int communityId, int pageNumber)
     {
         pageNumber = Math.max(pageNumber, 0);
 
         Pageable pageable = PageRequest.of(pageNumber, 25);
 
-        return PostMapper.INSTANCE.map(
-                postRepository.findAllByCommunityId(
-                communityId,
-                pageable));
-    }
+        return postRepository.findAllByCommunityId(communityId, pageable);
+
+    }   
 
 }
