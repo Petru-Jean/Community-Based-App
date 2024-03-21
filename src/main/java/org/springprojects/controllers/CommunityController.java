@@ -13,6 +13,7 @@ import org.springprojects.services.PostService;
 import org.springprojects.entities.Community;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Validated
@@ -35,8 +36,8 @@ public class CommunityController
         return "Success: " + community.getName();
     }
 
-    @GetMapping("/{communityName}/posts/{pageNumber}")
-    public List<Post> getPosts(@PathVariable String communityName, @PathVariable int pageNumber, HttpServletResponse response)
+    @GetMapping({"/{communityName}/posts/{pageNumber}", "{communityName}/posts"})
+    public List<Post> getPosts(@PathVariable String communityName, @PathVariable(required = false) Integer pageNumber, HttpServletResponse response)
     {
         Community community = communityService.findByName(communityName);
 
@@ -45,6 +46,9 @@ public class CommunityController
             response.setStatus(ExpiresFilter.XHttpServletResponse.SC_NOT_FOUND);
             return List.of();
         }
+
+        if(pageNumber == null)
+            pageNumber = 0;
 
         return postService.getPosts(community.getId(), pageNumber);
     }
