@@ -1,6 +1,7 @@
 package org.springprojects.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,9 +14,10 @@ import org.hibernate.validator.constraints.Length;
 public class Community
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int id;
 
-    @NotNull @NotBlank 
+    @NotNull @NotBlank
     @Length(min = 3, max = 21)
     @Pattern(regexp = "^[A-Za-z0-9_.-]+$")
     private String name;

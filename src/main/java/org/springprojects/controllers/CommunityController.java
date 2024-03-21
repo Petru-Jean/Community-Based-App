@@ -5,9 +5,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springprojects.entities.Post;
+import org.springprojects.repositories.CommunityRepository;
 import org.springprojects.services.CommunityService;
 import org.springprojects.services.PostService;
 import org.springprojects.entities.Community;
@@ -31,9 +33,9 @@ public class CommunityController
     }
 
     @PostMapping("/create")
-    public String createCommunity(@Valid @RequestBody Community community)
+    public ResponseEntity<?> createCommunity(@Valid @RequestBody Community community)
     {
-        return "Success: " + community.getName();
+        return communityService.create(community.getName(), community.getDescription());
     }
 
     @GetMapping({"/{communityName}/posts/{pageNumber}", "{communityName}/posts"})
