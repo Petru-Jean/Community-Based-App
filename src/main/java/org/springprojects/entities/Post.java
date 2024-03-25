@@ -1,5 +1,6 @@
 package org.springprojects.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ public class Post
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int id;
 
     @NotNull @NotBlank
@@ -21,7 +23,9 @@ public class Post
 
     @ManyToOne
     @JoinColumn(name = "community_id")
+    @JsonIgnore
     private Community community;
+
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -44,7 +48,7 @@ public class Post
     }
 
     public String getTitle() {
-        return title;
+        return  title;
     }
 
     public void setTitle(String title) {

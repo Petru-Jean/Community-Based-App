@@ -6,8 +6,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springprojects.filters.JwtAuthFilter;
+import org.springprojects.services.UserService;
 
 import javax.sql.DataSource;
 
@@ -25,12 +31,32 @@ public class ProjectConfig
         return new JdbcTemplate(dataSource);
     }
 
+    @Autowired
+    private JwtAuthFilter authTokenFilter;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
-        return http.
-                authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()).csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable).
-                build();
+        http.authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/error/**").permitAll()
+                .anyRequest().authenticated()
+        ).addFilterBefore(authTokenFilter, AuthorizationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);
+
+
+        return http.build();
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService()
+    {
+        return new UserService();
     }
 
 
