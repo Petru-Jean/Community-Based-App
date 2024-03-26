@@ -2,12 +2,12 @@ package org.springprojects.validation;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
 import org.springprojects.dto.ErrorDTO;
 import org.springprojects.exceptions.HandledException;
 
@@ -17,7 +17,17 @@ import java.util.Map;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorDTO> handleHttpMessageNotReadableException(HttpMessageConversionException ex)
+    {
+        ErrorDTO errorDTO = new ErrorDTO();
+        errorDTO.setMessage("The body is missing or was sent in an invalid format");
+        errorDTO.setStatus(HttpStatus.BAD_REQUEST.value().toString());
+
+        return new ResponseEntity<ErrorDTO>(errorDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex)
     {
         Map<String, String> errors = new HashMap<>();
@@ -29,7 +39,6 @@ public class CustomExceptionHandler {
 
         return ResponseEntity.badRequest().body(errors);
     }
-
 
     @ExceptionHandler(HandledException.class)
     public ResponseEntity<ErrorDTO> generateAlreadyExistsException(HandledException ex)

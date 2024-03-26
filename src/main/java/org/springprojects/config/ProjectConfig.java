@@ -38,9 +38,9 @@ public class ProjectConfig
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
         http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/error/**").permitAll()
-                .anyRequest().authenticated()
+            /*    .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/error/**").permitAll()*/
+                .anyRequest().permitAll()
         ).addFilterBefore(authTokenFilter, AuthorizationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);
 
