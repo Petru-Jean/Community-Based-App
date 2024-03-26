@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springprojects.dto.communityDTO.CommunityMapper;
+import org.springprojects.dto.communityDTO.CreateOrRetrieveCommunityDTO;
 import org.springprojects.entities.Post;
 import org.springprojects.entities.User;
 import org.springprojects.security.UsernameAndPasswordAuthentication;
@@ -35,15 +37,15 @@ public class CommunityController
     }
 
     @GetMapping("/")
-    public List<Community> getCommunities()
+    public List<CreateOrRetrieveCommunityDTO> getCommunities()
     {
-        return communityService.findAll();
+        return CommunityMapper.INSTANCE.toDTOList(communityService.findAll());
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> createCommunity(@Valid @RequestBody Community community)
+    public ResponseEntity<EntityModel<CreateOrRetrieveCommunityDTO>> createCommunity(@Valid @RequestBody CreateOrRetrieveCommunityDTO community)
     {
-        return communityService.create(community.getName(), community.getDescription());
+        return communityService.create(community);
     }
 
     @GetMapping("/{name}")

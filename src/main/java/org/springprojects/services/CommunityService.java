@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springprojects.controllers.CommunityController;
+import org.springprojects.dto.communityDTO.CommunityMapper;
+import org.springprojects.dto.communityDTO.CreateOrRetrieveCommunityDTO;
 import org.springprojects.entities.Community;
 import org.springprojects.entities.Post;
 import org.springprojects.exceptions.AlreadyExistsException;
@@ -45,23 +47,20 @@ public class CommunityService
         return new ResponseEntity<EntityModel<Community>>(em, HttpStatus.OK);
     }
 
-    public ResponseEntity<EntityModel<Community>> create(String name, String description)
+    public ResponseEntity<EntityModel<CreateOrRetrieveCommunityDTO>> create(CreateOrRetrieveCommunityDTO communityDTO)
     {
-        if(communityRepository.findByName(name) != null)
+        if(communityRepository.findByName(communityDTO.getName()) != null)
         {
-            throw new AlreadyExistsException("Community with name '" +  name + "' already exists.");
+            throw new AlreadyExistsException("Community with name '" +  communityDTO.getName() + "' already exists.");
         }
 
-        Community community = new Community();
-
-        community.setName(name);
-        community.setDescription(description);
+        Community community = CommunityMapper.INSTANCE.toCommunity(communityDTO);
 
         communityRepository.save(community);
 
-        EntityModel<Community> em  = EntityModel.of(community, linkTo(CommunityController.class).slash(community.getName()).withSelfRel());
+        EntityModel<CreateOrRetrieveCommunityDTO> em  = EntityModel.of(communityDTO, linkTo(CommunityController.class).slash(community.getName()).withSelfRel());
 
-        return new ResponseEntity<EntityModel<Community>>(em, HttpStatus.CREATED);
+        return new ResponseEntity<EntityModel<CreateOrRetrieveCommunityDTO>>(em, HttpStatus.CREATED);
     }
 
     public ResponseEntity<String> deleteCommunity(String name)
