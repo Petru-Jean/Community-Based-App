@@ -22,7 +22,7 @@ public class Community
     @Pattern(regexp = "^[A-Za-z0-9_.-]+$")
     private String name;
 
-    @Length(max = 512)
+    @Length(max = 512) @NotNull @NotBlank
     private String description;
 
     @OneToMany(mappedBy = "community")
