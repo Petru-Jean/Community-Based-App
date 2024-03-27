@@ -2,11 +2,10 @@ package org.springprojects.dto.communityDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springprojects.validation.CommunityNameValidation;
 
-public class CreateOrRetrieveCommunityDTO
+public class CreateOrViewCommunityDTO
 {
     @CommunityNameValidation
     private String name;
@@ -14,7 +13,7 @@ public class CreateOrRetrieveCommunityDTO
     @Length(max = 512) @NotNull @NotBlank
     private String description;
 
-    public CreateOrRetrieveCommunityDTO(String name, String description) {
+    public CreateOrViewCommunityDTO(String name, String description) {
         this.name = name;
         this.description = description;
     }

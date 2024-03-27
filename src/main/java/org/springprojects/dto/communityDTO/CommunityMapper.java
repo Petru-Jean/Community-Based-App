@@ -11,10 +11,10 @@ public interface CommunityMapper
 {
     CommunityMapper INSTANCE = Mappers.getMapper( CommunityMapper.class );
 
-    Community toCommunity(CreateOrRetrieveCommunityDTO community);
+    Community toCommunity(CreateOrViewCommunityDTO community);
 
-    CreateOrRetrieveCommunityDTO toDTO(Community community);
+    CreateOrViewCommunityDTO toDTO(Community community);
 
-    List<CreateOrRetrieveCommunityDTO> toDTOList(List<Community> communities);
+    List<CreateOrViewCommunityDTO> toDTOList(List<Community> communities);
 
 }

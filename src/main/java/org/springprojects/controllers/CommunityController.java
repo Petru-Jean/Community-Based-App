@@ -8,9 +8,9 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springprojects.dto.communityDTO.CommunityMapper;
-import org.springprojects.dto.communityDTO.CreateOrRetrieveCommunityDTO;
+import org.springprojects.dto.communityDTO.CreateOrViewCommunityDTO;
+import org.springprojects.dto.postDTO.CreateOrViewPostDTO;
+import org.springprojects.dto.postDTO.PostMapper;
 import org.springprojects.entities.Post;
 import org.springprojects.entities.User;
 import org.springprojects.services.CommunityService;
@@ -36,13 +36,13 @@ public class CommunityController
     }
 
     @GetMapping("/")
-    public ResponseEntity<CollectionModel<EntityModel<CreateOrRetrieveCommunityDTO>>> getCommunities()
+    public ResponseEntity<CollectionModel<EntityModel<CreateOrViewCommunityDTO>>> getCommunities()
     {
         return communityService.getCommunities();
     }
 
     @PostMapping("/")
-    public ResponseEntity<EntityModel<CreateOrRetrieveCommunityDTO>> createCommunity(@Valid @RequestBody CreateOrRetrieveCommunityDTO community)
+    public ResponseEntity<EntityModel<CreateOrViewCommunityDTO>> createCommunity(@Valid @RequestBody CreateOrViewCommunityDTO community)
     {
         return communityService.createCommunity(community);
     }
@@ -54,11 +54,9 @@ public class CommunityController
     }
 
     @GetMapping({"/{name}/posts/{pageNumber}", "/{name}/posts"})
-    public List<Post> getPosts(@PathVariable String name, @PathVariable(required = false) Integer pageNumber, HttpServletResponse response)
+    public ResponseEntity<List<Post>> getPosts(@PathVariable String name, @PathVariable(required = false) Integer pageNumber, HttpServletResponse response)
     {
         var responseEntity = communityService.getCommunity(name);
-
-        if(responseEntity == null) return List.of();
 
         if(pageNumber == null)  pageNumber = 0;
 
@@ -74,17 +72,9 @@ public class CommunityController
     }
 
     @PostMapping("/community/{communityName}/post")
-    public ResponseEntity<EntityModel<Post>> createPost(@PathVariable String communityName, @Valid @RequestBody Post post)
+    public ResponseEntity<EntityModel<CreateOrViewPostDTO>> createPost(@PathVariable String communityName, @Valid @RequestBody CreateOrViewPostDTO postDTO)
     {
-        var responseEntity = communityService.getCommunity(communityName);
-
-        User user = new User();
-        user.setId(1);
-
-        post.setUser(user);
-        post.setCommunity(Objects.requireNonNull(responseEntity.getBody()).getContent());
-
-        return postService.createPost(post);
+        return postService.createPost(communityName, postDTO);
     }
 
 

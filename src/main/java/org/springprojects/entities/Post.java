@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
+import org.springprojects.validation.PostContentValidation;
+import org.springprojects.validation.PostTitleValidation;
 
 @Entity
 public class Post
@@ -14,11 +16,10 @@ public class Post
     @JsonIgnore
     private int id;
 
-    @NotNull @NotBlank
-    @Length(min = 1, max = 300)
+    @PostTitleValidation
     private String title;
 
-    @Length(max = 65535)
+    @PostContentValidation
     private String content;
 
     @ManyToOne
