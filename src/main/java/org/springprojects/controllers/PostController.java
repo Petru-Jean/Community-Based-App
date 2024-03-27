@@ -35,11 +35,10 @@ public class PostController
         return postService.getPosts(communityName, pageNumber == null || pageNumber < 0 ? 0 : pageNumber);
     }
 
-    @GetMapping("/posts/{postId}")
-    public ResponseEntity<EntityModel<Post>> getPost(@PathVariable int postId)
+    @GetMapping("/posts/{postURI}")
+    public ResponseEntity<EntityModel<ViewPostDTO>> getPost(@PathVariable String postURI)
     {
-
-        return postService.findPostById(postId);
+        return postService.getPost(postURI);
     }
 
     @PostMapping("/posts")

@@ -14,4 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     public List<Post> findAllByCommunityId(int community_id, Pageable pageable);
 
+    public Post findByExternalId(String external_id);
+
 }

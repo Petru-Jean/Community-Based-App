@@ -54,10 +54,10 @@ public class PostService
         List<ViewPostDTO> postDTOs = PostMapper.INSTANCE.getPostDTOs( postRepository.findAllByCommunityId(community.getId(), pageable) );
 
         List<EntityModel<ViewPostDTO>> ems = postDTOs.stream().map(dto ->
-                EntityModel.of(dto, linkTo(CommunityController.class).slash(communityName).slash(dto.getExternalId()).withSelfRel())).toList();
+                EntityModel.of(dto, linkTo(CommunityController.class).slash(communityName).slash("posts").slash(dto.getExternalId()).withSelfRel())).toList();
 
         CollectionModel<EntityModel<ViewPostDTO>> model = CollectionModel.of(ems);
-        model.add(linkTo(CommunityController.class).withSelfRel());
+        model.add(linkTo(CommunityController.class).slash(communityName).slash("posts").withSelfRel());
 
         return new ResponseEntity<>(model, HttpStatus.OK);//, HttpStatus.OK);
     }   
@@ -85,20 +85,22 @@ public class PostService
 
         postRepository.save(post);
 
-        return new ResponseEntity<>(EntityModel.of(postDTO).add(linkTo(CommunityController.class).slash(community.getName()).slash(post.getId()).withSelfRel()), HttpStatus.CREATED);
+        return new ResponseEntity<>(EntityModel.of(postDTO).add(linkTo(CommunityController.class).slash(community.getName()).slash("posts").slash(post.getExternalId()).withSelfRel()), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<EntityModel<Post>> findPostById(int postId)
+    public ResponseEntity<EntityModel<ViewPostDTO>> getPost(String postURI)
     {
-        Optional<Post> post = postRepository.findById(postId);
+        Post post = postRepository.findByExternalId(postURI);
 
-        if(post.isEmpty())
+        if(post == null)
         {
-            throw new NotFoundException("Post with id '" + postId + "' does not exist.");
+            throw new NotFoundException("Post with uri '" + postURI + "' does not exist.");
         }
 
+        var dto = PostMapper.INSTANCE.toViewPostDTO(post);
+
         return new ResponseEntity<>(
-                EntityModel.of(post.get()).add(linkTo(CommunityController.class).slash("posts").slash(post.get().getId()).withSelfRel()),
+                EntityModel.of(dto).add(linkTo(CommunityController.class).slash(post.getCommunity().getName()).slash("posts").slash(post.getExternalId()).withSelfRel()),
                 HttpStatus.OK);
     }
 

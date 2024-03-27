@@ -14,6 +14,8 @@ public interface PostMapper
 
     List<ViewPostDTO> getPostDTOs(List<Post> posts);
 
+    ViewPostDTO toViewPostDTO(Post post);
+    CreatePostDTO toCreatePostDTO(Post post);
 
     Post toPost(CreatePostDTO dto);
     Post toPost(ViewPostDTO dto);
