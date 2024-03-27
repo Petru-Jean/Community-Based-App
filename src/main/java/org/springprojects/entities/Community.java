@@ -8,6 +8,7 @@ import java.util.List;
 
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
+import org.springprojects.validation.CommunityNameValidation;
 
 
 @Entity
@@ -17,9 +18,7 @@ public class Community
     @JsonIgnore
     private int id;
 
-    @NotNull @NotBlank
-    @Length(min = 3, max = 21)
-    @Pattern(regexp = "^[A-Za-z0-9_.-]+$")
+    @CommunityNameValidation
     private String name;
 
     @Length(max = 512) @NotNull @NotBlank

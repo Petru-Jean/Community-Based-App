@@ -39,7 +39,7 @@ public class CommunityService
 
         if(community == null)
         {
-            throw new NotFoundException("Community with name '"+name+"' does not exist.");
+            throw new NotFoundException("Community with name '"+name+"' does not exist");
         }
 
         EntityModel<Community> em  = EntityModel.of(community, linkTo(CommunityController.class).slash(community.getName()).withSelfRel());
@@ -51,7 +51,7 @@ public class CommunityService
     {
         if(communityRepository.findByName(communityDTO.getName()) != null)
         {
-            throw new AlreadyExistsException("Community with name '" +  communityDTO.getName() + "' already exists.");
+            throw new AlreadyExistsException("Community with name '" +  communityDTO.getName() + "' already exists");
         }
 
         Community community = CommunityMapper.INSTANCE.toCommunity(communityDTO);
@@ -69,12 +69,12 @@ public class CommunityService
 
         if(community == null)
         {
-            throw new NotFoundException("Community with name '" + name + "' does not exist.");
+            throw new NotFoundException("Community with name '" + name + "' does not exist");
         }
 
         communityRepository.delete(community);
 
-        return new ResponseEntity<>("Community with name '" + name + "' has been deleted.", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Community with name '" + name + "' has been deleted", HttpStatus.NO_CONTENT);
     }
 
 

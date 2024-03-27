@@ -4,15 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import org.springprojects.validation.CommunityNameValidation;
 
 public class CreateOrRetrieveCommunityDTO
 {
-    @NotNull @NotBlank
-    @Length(min = 3, max = 21)
-    @Pattern(regexp = "^[A-Za-z0-9_.-]+$")
+    @CommunityNameValidation
     private String name;
 
-    @Length(max = 512)
+    @Length(max = 512) @NotNull @NotBlank
     private String description;
 
     public CreateOrRetrieveCommunityDTO(String name, String description) {

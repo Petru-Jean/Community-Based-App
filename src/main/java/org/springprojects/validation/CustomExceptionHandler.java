@@ -22,7 +22,7 @@ public class CustomExceptionHandler {
     {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setMessage("The body is missing or was sent in an invalid format");
-        errorDTO.setStatus(HttpStatus.BAD_REQUEST.value().toString());
+        errorDTO.setStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()));
 
         return new ResponseEntity<ErrorDTO>(errorDTO, HttpStatus.BAD_REQUEST);
     }
