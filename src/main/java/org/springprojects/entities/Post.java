@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.boot.context.properties.bind.Name;
 import org.springprojects.validation.PostContentValidation;
+import org.springprojects.validation.PostExternalIdValidation;
 import org.springprojects.validation.PostTitleValidation;
 
 @Entity
@@ -22,11 +24,24 @@ public class Post
     @PostContentValidation
     private String content;
 
+    @PostExternalIdValidation
+    @Column(name = "external_id")
+    private String externalId;
+
+    public String getExternalId()
+    {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId)
+    {
+        this.externalId = externalId;
+    }
+
     @ManyToOne
     @JoinColumn(name = "community_id")
     @JsonIgnore
     private Community community;
-
 
     @OneToOne
     @JoinColumn(name = "user_id")

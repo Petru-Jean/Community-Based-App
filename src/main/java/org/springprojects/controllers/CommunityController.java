@@ -1,6 +1,5 @@
 package org.springprojects.controllers;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -9,16 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springprojects.dto.communityDTO.CreateOrViewCommunityDTO;
-import org.springprojects.dto.postDTO.CreateOrViewPostDTO;
-import org.springprojects.dto.postDTO.PostMapper;
-import org.springprojects.entities.Post;
-import org.springprojects.entities.User;
 import org.springprojects.services.CommunityService;
 import org.springprojects.services.PostService;
 import org.springprojects.entities.Community;
-
-import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Validated

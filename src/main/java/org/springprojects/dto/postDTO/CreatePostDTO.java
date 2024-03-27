@@ -1,21 +1,20 @@
 package org.springprojects.dto.postDTO;
 
-import org.springframework.hateoas.server.core.Relation;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
 
-@Relation(collectionRelation = "posts", itemRelation = "post")
-public class CreateOrViewPostDTO
+public class CreatePostDTO
 {
+
     @PostTitleValidation
     private String title;
 
     @PostContentValidation
     private String content;
 
-    public CreateOrViewPostDTO(String title, String content)
+    public CreatePostDTO(String title, String content)
     {
-        this.title   = title;
+        this.title = title;
         this.content = content;
     }
 
@@ -38,4 +37,5 @@ public class CreateOrViewPostDTO
     {
         this.content = content;
     }
+
 }

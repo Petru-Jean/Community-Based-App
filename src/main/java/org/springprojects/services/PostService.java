@@ -1,40 +1,27 @@
 package org.springprojects.services;
 
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.catalina.filters.ExpiresFilter;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.core.Relation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.server.ResponseStatusException;
 import org.springprojects.controllers.CommunityController;
-import org.springprojects.controllers.PostController;
-import org.springprojects.dto.communityDTO.CreateOrViewCommunityDTO;
-import org.springprojects.dto.postDTO.CreateOrViewPostDTO;
+import org.springprojects.dto.postDTO.CreatePostDTO;
 import org.springprojects.dto.postDTO.PostMapper;
+import org.springprojects.dto.postDTO.ViewPostDTO;
 import org.springprojects.entities.Community;
 import org.springprojects.entities.Post;
 import org.springprojects.entities.User;
 import org.springprojects.exceptions.NotFoundException;
-import org.springprojects.repositories.CommunityRepository;
 import org.springprojects.repositories.PostRepository;
 
-import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -51,7 +38,7 @@ public class PostService
         this.communityService = communityService;
     }
 
-    public ResponseEntity<CollectionModel<EntityModel<CreateOrViewPostDTO>>> getPosts(String communityName, int pageNumber)
+    public ResponseEntity<CollectionModel<EntityModel<ViewPostDTO>>> getPosts(String communityName, int pageNumber)
     {
         var responseEntity = communityService.getCommunity(communityName);
 
@@ -64,17 +51,18 @@ public class PostService
 
         Community community = responseEntity.getBody().getContent();
 
-        List<CreateOrViewPostDTO> postDTOs = PostMapper.INSTANCE.getPostDTOs( postRepository.findAllByCommunityId(community.getId(), pageable) );
+        List<ViewPostDTO> postDTOs = PostMapper.INSTANCE.getPostDTOs( postRepository.findAllByCommunityId(community.getId(), pageable) );
 
-        List<EntityModel<CreateOrViewPostDTO>> emlist = postDTOs.stream().map(EntityModel::of).toList();
+        List<EntityModel<ViewPostDTO>> ems = postDTOs.stream().map(dto ->
+                EntityModel.of(dto, linkTo(CommunityController.class).slash(communityName).slash(dto.getExternalId()).withSelfRel())).toList();
 
-        CollectionModel<EntityModel<CreateOrViewPostDTO>> model = CollectionModel.of(emlist);
+        CollectionModel<EntityModel<ViewPostDTO>> model = CollectionModel.of(ems);
         model.add(linkTo(CommunityController.class).withSelfRel());
 
         return new ResponseEntity<>(model, HttpStatus.OK);//, HttpStatus.OK);
     }   
 
-    public ResponseEntity<EntityModel<CreateOrViewPostDTO>> createPost(String communityName, CreateOrViewPostDTO postDTO)
+    public ResponseEntity<EntityModel<CreatePostDTO>> createPost(String communityName, CreatePostDTO postDTO)
     {
         var communityResponseEntity = communityService.getCommunity(communityName);
 
@@ -91,6 +79,9 @@ public class PostService
 
         post.setUser( user );
         post.setCommunity(community);
+
+        // Temporary solution
+        post.setExternalId(UUID.randomUUID().toString().replace("-","").substring(0,8));
 
         postRepository.save(post);
 
