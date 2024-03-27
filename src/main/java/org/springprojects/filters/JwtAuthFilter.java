@@ -39,7 +39,7 @@ public class JwtAuthFilter  extends OncePerRequestFilter
 
         if(a.isAuthenticated())
         {
-            System.out.println("UserDetails: " + ((UserDetails) ca.getPrincipal()).getUsername() );
+            //System.out.println("UserDetails: " + ((UserDetails) ca.getPrincipal()).getUsername() );
 
             SecurityContextHolder.getContext().setAuthentication(a);
             filterChain.doFilter(request, response);

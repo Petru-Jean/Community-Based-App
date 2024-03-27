@@ -3,17 +3,16 @@ package org.springprojects.controllers;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springprojects.dto.communityDTO.CommunityMapper;
 import org.springprojects.dto.communityDTO.CreateOrRetrieveCommunityDTO;
 import org.springprojects.entities.Post;
 import org.springprojects.entities.User;
-import org.springprojects.security.UsernameAndPasswordAuthentication;
 import org.springprojects.services.CommunityService;
 import org.springprojects.services.PostService;
 import org.springprojects.entities.Community;
@@ -37,27 +36,27 @@ public class CommunityController
     }
 
     @GetMapping("/")
-    public List<CreateOrRetrieveCommunityDTO> getCommunities()
+    public ResponseEntity<CollectionModel<EntityModel<CreateOrRetrieveCommunityDTO>>> getCommunities()
     {
-        return CommunityMapper.INSTANCE.toDTOList(communityService.findAll());
+        return communityService.getCommunities();
     }
 
     @PostMapping("/")
     public ResponseEntity<EntityModel<CreateOrRetrieveCommunityDTO>> createCommunity(@Valid @RequestBody CreateOrRetrieveCommunityDTO community)
     {
-        return communityService.create(community);
+        return communityService.createCommunity(community);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<EntityModel<Community>> getCommunity(@PathVariable String name)
     {
-        return communityService.findByName(name);
+        return communityService.getCommunity(name);
     }
 
     @GetMapping({"/{name}/posts/{pageNumber}", "/{name}/posts"})
     public List<Post> getPosts(@PathVariable String name, @PathVariable(required = false) Integer pageNumber, HttpServletResponse response)
     {
-        var responseEntity = communityService.findByName(name);
+        var responseEntity = communityService.getCommunity(name);
 
         if(responseEntity == null) return List.of();
 
@@ -77,7 +76,7 @@ public class CommunityController
     @PostMapping("/community/{communityName}/post")
     public ResponseEntity<EntityModel<Post>> createPost(@PathVariable String communityName, @Valid @RequestBody Post post)
     {
-        var responseEntity = communityService.findByName(communityName);
+        var responseEntity = communityService.getCommunity(communityName);
 
         User user = new User();
         user.setId(1);
