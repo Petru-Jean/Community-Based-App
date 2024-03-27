@@ -6,7 +6,9 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.core.Relation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 import org.springprojects.controllers.CommunityController;
+import org.springprojects.controllers.PostController;
+import org.springprojects.dto.communityDTO.CreateOrViewCommunityDTO;
 import org.springprojects.dto.postDTO.CreateOrViewPostDTO;
 import org.springprojects.dto.postDTO.PostMapper;
 import org.springprojects.entities.Community;
@@ -47,13 +51,27 @@ public class PostService
         this.communityService = communityService;
     }
 
-    public List<Post> getPosts(int communityId, int pageNumber)
+    public ResponseEntity<CollectionModel<EntityModel<CreateOrViewPostDTO>>> getPosts(String communityName, int pageNumber)
     {
-        pageNumber = Math.max(pageNumber, 0);
+        var responseEntity = communityService.getCommunity(communityName);
+
+        if(responseEntity == null || responseEntity.getBody() == null || responseEntity.getBody().getContent() == null)
+        {
+            throw new NotFoundException("Failed to get posts because community '" + communityName + "' does not exist");
+        }
 
         Pageable pageable = PageRequest.of(pageNumber, 25);
 
-        return postRepository.findAllByCommunityId(communityId, pageable);
+        Community community = responseEntity.getBody().getContent();
+
+        List<CreateOrViewPostDTO> postDTOs = PostMapper.INSTANCE.getPostDTOs( postRepository.findAllByCommunityId(community.getId(), pageable) );
+
+        List<EntityModel<CreateOrViewPostDTO>> emlist = postDTOs.stream().map(EntityModel::of).toList();
+
+        CollectionModel<EntityModel<CreateOrViewPostDTO>> model = CollectionModel.of(emlist);
+        model.add(linkTo(CommunityController.class).withSelfRel());
+
+        return new ResponseEntity<>(model, HttpStatus.OK);//, HttpStatus.OK);
     }   
 
     public ResponseEntity<EntityModel<CreateOrViewPostDTO>> createPost(String communityName, CreateOrViewPostDTO postDTO)
@@ -69,7 +87,9 @@ public class PostService
 
         Post post = PostMapper.INSTANCE.toPost(postDTO);
 
-        //post.setUser( ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()) );
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        post.setUser( user );
         post.setCommunity(community);
 
         postRepository.save(post);

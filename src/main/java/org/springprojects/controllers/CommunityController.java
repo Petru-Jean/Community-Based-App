@@ -47,35 +47,12 @@ public class CommunityController
         return communityService.createCommunity(community);
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<EntityModel<Community>> getCommunity(@PathVariable String name)
+    @GetMapping("/{communityName}")
+    public ResponseEntity<EntityModel<Community>> getCommunity(@PathVariable String communityName)
     {
-        return communityService.getCommunity(name);
+        return communityService.getCommunity(communityName);
     }
 
-    @GetMapping({"/{name}/posts/{pageNumber}", "/{name}/posts"})
-    public ResponseEntity<List<Post>> getPosts(@PathVariable String name, @PathVariable(required = false) Integer pageNumber, HttpServletResponse response)
-    {
-        var responseEntity = communityService.getCommunity(name);
-
-        if(pageNumber == null)  pageNumber = 0;
-
-        return postService.getPosts(responseEntity.getBody().getContent().getId(), pageNumber);
-    }
-
-    @GetMapping("/{name}/post/{postId}")
-    public ResponseEntity<EntityModel<Post>> getPost(@PathVariable int postId)
-    {
-        var postEntity = postService.findPostById(postId);
-
-        return postEntity;
-    }
-
-    @PostMapping("/community/{communityName}/post")
-    public ResponseEntity<EntityModel<CreateOrViewPostDTO>> createPost(@PathVariable String communityName, @Valid @RequestBody CreateOrViewPostDTO postDTO)
-    {
-        return postService.createPost(communityName, postDTO);
-    }
 
 
 }

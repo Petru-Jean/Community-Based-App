@@ -9,10 +9,8 @@ import org.hibernate.validator.constraints.Length;
 
 import java.lang.annotation.*;
 
-@NotNull
-@NotBlank
+/*@NotNull @NotBlank*/
 @Length(min = 1, max = 300)
-
 @Documented
 @Constraint(validatedBy = {})
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})

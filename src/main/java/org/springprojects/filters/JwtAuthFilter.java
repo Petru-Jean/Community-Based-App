@@ -6,11 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springprojects.security.JwtAuthentication;
+import org.springprojects.security.JwtDetailsAuthentication;
 import org.springprojects.security.CustomAuthenticationManager;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class JwtAuthFilter  extends OncePerRequestFilter
 
         String jwt =  header.substring(7);
 
-        JwtAuthentication ca = new JwtAuthentication(jwt);
+        JwtDetailsAuthentication ca = new JwtDetailsAuthentication(jwt);
 
         var a = customAuthenticationManager.authenticate(ca);
 

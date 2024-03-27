@@ -1,16 +1,15 @@
 package org.springprojects.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springprojects.entities.User;
 
 import java.util.Collection;
 
 public class UserDetailsAuthentication extends AbstractAuthenticationToken {
 
-    private  UserDetails userDetails;
+    private UserDetails userDetails;
 
 
     /**
@@ -20,18 +19,21 @@ public class UserDetailsAuthentication extends AbstractAuthenticationToken {
      *                    represented by this authentication object.
      */
 
-    public UserDetailsAuthentication(Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsAuthentication(Collection<? extends GrantedAuthority> authorities)
+    {
         super(authorities);
         this.userDetails = null;
     }
 
     @Override
     public Object getCredentials() {
+
         return null;
     }
 
     @Override
     public Object getPrincipal() {
+
         return userDetails;
     }
 

@@ -19,7 +19,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        JwtAuthentication ca = (JwtAuthentication) authentication;
+        JwtDetailsAuthentication ca = (JwtDetailsAuthentication) authentication;
 
         try {
 
@@ -34,7 +34,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return JwtAuthentication.class.equals(authentication);
+        return JwtDetailsAuthentication.class.equals(authentication);
     }
 
 }

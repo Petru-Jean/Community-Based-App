@@ -40,6 +40,7 @@ public class ProjectConfig
         http.authorizeHttpRequests((authorize) -> authorize
             /*    .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/error/**").permitAll()*/
+                       // .requestMatchers("communities/posts")
                 .anyRequest().permitAll()
         ).addFilterBefore(authTokenFilter, AuthorizationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);

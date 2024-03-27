@@ -1,22 +1,13 @@
 package org.springprojects.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springprojects.services.UserService;
-
-import java.util.Collection;
-import java.util.Objects;
 
 @Component
 public class UsernameAndPasswordAuthenticationProvider implements AuthenticationProvider {
@@ -32,7 +23,7 @@ public class UsernameAndPasswordAuthenticationProvider implements Authentication
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
-        UsernameAndPasswordAuthentication upa = (UsernameAndPasswordAuthentication) authentication;
+        UsernameAndPasswordDetailsAuthentication upa = (UsernameAndPasswordDetailsAuthentication) authentication;
 
         UserDetails userDetails = userService.loadUserByUsername(upa.getUsername());
 

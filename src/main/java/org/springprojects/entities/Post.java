@@ -71,4 +71,16 @@ public class Post
     public void setCommunity(Community community) {
         this.community = community;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", community=" + community +
+                ", user=" + user +
+                '}';
+    }
 }

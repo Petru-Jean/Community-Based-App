@@ -1,17 +1,13 @@
 package org.springprojects.security;
 
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
-import java.util.Collection;
-
-public class UsernameAndPasswordAuthentication extends UserDetailsAuthentication {
+public class UsernameAndPasswordDetailsAuthentication extends UserDetailsAuthentication
+{
 
     private final String username, password;
 
-    public UsernameAndPasswordAuthentication(String username, String password)
+    public UsernameAndPasswordDetailsAuthentication(String username, String password)
     {
         super(AuthorityUtils.NO_AUTHORITIES);
         this.username = username;
