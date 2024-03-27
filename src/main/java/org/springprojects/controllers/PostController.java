@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springprojects.dto.postDTO.CreatePostDTO;
@@ -26,6 +29,7 @@ public class PostController
     }
 
     @GetMapping("/posts")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CollectionModel<EntityModel<ViewPostDTO>>> getPosts(@PathVariable String communityName, @RequestParam(required = false) Integer pageNumber)
     {
         return postService.getPosts(communityName, pageNumber == null || pageNumber < 0 ? 0 : pageNumber);
@@ -34,9 +38,8 @@ public class PostController
     @GetMapping("/posts/{postId}")
     public ResponseEntity<EntityModel<Post>> getPost(@PathVariable int postId)
     {
-        var postEntity = postService.findPostById(postId);
 
-        return postEntity;
+        return postService.findPostById(postId);
     }
 
     @PostMapping("/posts")
