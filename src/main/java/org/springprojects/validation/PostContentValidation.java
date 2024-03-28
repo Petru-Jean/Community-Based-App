@@ -11,7 +11,6 @@ import java.lang.annotation.*;
 
 
 @Length(max = 65535)
-
 @Documented
 @Constraint(validatedBy = {})
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})

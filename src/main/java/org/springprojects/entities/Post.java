@@ -11,7 +11,7 @@ import org.springprojects.validation.PostExternalIdValidation;
 import org.springprojects.validation.PostTitleValidation;
 
 @Entity
-public class Post
+public class Post extends DateAudit
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

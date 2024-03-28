@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 import java.lang.annotation.*;
 
-/*@NotNull @NotBlank*/
+@NotNull @NotBlank
 @Length(min = 1, max = 300)
 @Documented
 @Constraint(validatedBy = {})

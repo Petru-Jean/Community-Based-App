@@ -7,7 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springprojects.controllers.CommunityController;
 import org.springprojects.dto.communityDTO.CommunityMapper;
-import org.springprojects.dto.communityDTO.CreateOrViewCommunityDTO;
+import org.springprojects.dto.communityDTO.CreateCommunityDTO;
+import org.springprojects.dto.communityDTO.ViewCommunityDTO;
 import org.springprojects.entities.Community;
 import org.springprojects.exceptions.AlreadyExistsException;
 import org.springprojects.exceptions.NotFoundException;
@@ -29,17 +30,17 @@ public class CommunityService
         this.communityRepository = communityRepository;
     }
 
-    public ResponseEntity<CollectionModel<EntityModel<CreateOrViewCommunityDTO>>> getCommunities()
+    public ResponseEntity<CollectionModel<EntityModel<ViewCommunityDTO>>> getCommunities()
     {
-        List<CreateOrViewCommunityDTO> communities = CommunityMapper.INSTANCE.toDTOList(communityRepository.findAll());
+        List<ViewCommunityDTO> communities = CommunityMapper.INSTANCE.toViewDTOList(communityRepository.findAll());
 
-        List<EntityModel<CreateOrViewCommunityDTO>> emlist = communities.stream().map(community ->
+        List<EntityModel<ViewCommunityDTO>> emlist = communities.stream().map(community ->
                 EntityModel.of(community,
                         linkTo(CommunityController.class).slash(community.getName()).withSelfRel())).toList();
 
 //        CollectionModel.of(communities);
 
-        CollectionModel<EntityModel<CreateOrViewCommunityDTO>> model = CollectionModel.of(emlist);
+        CollectionModel<EntityModel<ViewCommunityDTO>> model = CollectionModel.of(emlist);
         model.add(linkTo(CommunityController.class).withSelfRel());
 
         return new ResponseEntity<>(model, HttpStatus.OK);//, HttpStatus.OK);
@@ -49,7 +50,7 @@ public class CommunityService
                               linkTo(CommunityController.class).slash(community.getName()).withSelfRel()) );*/
     }
 
-    public ResponseEntity<EntityModel<Community>> getCommunity(String name)
+    public ResponseEntity<EntityModel<ViewCommunityDTO>> getCommunity(String name)
     {
         Community community =  communityRepository.findByName(name);
 
@@ -58,12 +59,14 @@ public class CommunityService
             throw new NotFoundException("Community with name '"+name+"' does not exist");
         }
 
-        EntityModel<Community> em  = EntityModel.of(community, linkTo(CommunityController.class).slash(community.getName()).withSelfRel());
+        ViewCommunityDTO dto = CommunityMapper.INSTANCE.toViewDTO(community);
 
-        return new ResponseEntity<EntityModel<Community>>(em, HttpStatus.OK);
+        EntityModel<ViewCommunityDTO> em  = EntityModel.of(dto, linkTo(CommunityController.class).slash(community.getName()).withSelfRel());
+
+        return new ResponseEntity<EntityModel<ViewCommunityDTO>>(em, HttpStatus.OK);
     }
 
-    public ResponseEntity<EntityModel<CreateOrViewCommunityDTO>> createCommunity(CreateOrViewCommunityDTO communityDTO)
+    public ResponseEntity<EntityModel<CreateCommunityDTO>> createCommunity(CreateCommunityDTO communityDTO)
     {
         if(communityRepository.findByName(communityDTO.getName()) != null)
         {
@@ -74,9 +77,9 @@ public class CommunityService
 
         communityRepository.save(community);
 
-        EntityModel<CreateOrViewCommunityDTO> em  = EntityModel.of(communityDTO, linkTo(CommunityController.class).slash(community.getName()).withSelfRel());
+        EntityModel<CreateCommunityDTO> em  = EntityModel.of(communityDTO, linkTo(CommunityController.class).slash(community.getName()).withSelfRel());
 
-        return new ResponseEntity<EntityModel<CreateOrViewCommunityDTO>>(em, HttpStatus.CREATED);
+        return new ResponseEntity<EntityModel<CreateCommunityDTO>>(em, HttpStatus.CREATED);
     }
 
     public ResponseEntity<String> deleteCommunity(String name)

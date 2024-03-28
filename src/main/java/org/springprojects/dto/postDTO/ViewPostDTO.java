@@ -6,9 +6,12 @@ import org.springprojects.controllers.CommunityController;
 import org.springprojects.controllers.PostController;
 import org.springprojects.controllers.UserController;
 import org.springprojects.dto.userDTO.ViewUserDTO;
+import org.springprojects.entities.DateAudit;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
 import org.springprojects.entities.User;
+
+import java.util.Date;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -26,11 +29,15 @@ public class ViewPostDTO
     private EntityModel<ViewUserDTO> user;
     private String externalId;
 
-    public ViewPostDTO(String title, String content, String externalId)
+    private final Date createdAt;
+
+
+    public ViewPostDTO(String title, String content, String externalId, Date createdAt)
     {
-        this.title = title;
-        this.content = content;
-        this.externalId = externalId;
+        this.title       = title;
+        this.content     = content;
+        this.externalId  = externalId;
+        this.createdAt   = createdAt;
     }
 
 
@@ -72,6 +79,11 @@ public class ViewPostDTO
     public void setUser(ViewUserDTO user)
     {
         this.user = EntityModel.of(user, linkTo(UserController.class).slash(user.getUsername()).withSelfRel());
+    }
+
+    private Date getCreatedAt()
+    {
+        return createdAt;
     }
 
 }

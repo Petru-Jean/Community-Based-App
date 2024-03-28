@@ -4,10 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.server.core.Relation;
+import org.springprojects.entities.DateAudit;
 import org.springprojects.validation.CommunityNameValidation;
 
+import java.util.Date;
+
 @Relation(collectionRelation = "communities", itemRelation = "community")
-public class CreateOrViewCommunityDTO
+public class CreateCommunityDTO
 {
     @CommunityNameValidation
     private String name;
@@ -15,7 +18,7 @@ public class CreateOrViewCommunityDTO
     @Length(max = 512) @NotNull @NotBlank
     private String description;
 
-    public CreateOrViewCommunityDTO(String name, String description) {
+    public CreateCommunityDTO(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -35,4 +38,5 @@ public class CreateOrViewCommunityDTO
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

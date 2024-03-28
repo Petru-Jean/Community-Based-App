@@ -20,7 +20,6 @@ public class AuthController
    @Autowired
    private JwtService jwtService;
 
-
     @GetMapping("/ViewToken/{token}")
     public String viewJwtToken(@PathVariable String token) {
         try {

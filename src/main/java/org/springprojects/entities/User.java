@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 @Entity
-public class User implements UserDetails
+public class User extends DateAudit implements UserDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

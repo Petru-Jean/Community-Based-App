@@ -1,12 +1,19 @@
 package org.springprojects.dto.userDTO;
 
+import org.springprojects.entities.DateAudit;
+
+import java.util.Date;
+
 public class ViewUserDTO
 {
-    public String username;
+    private String username;
 
-    public ViewUserDTO(String username)
+    private final Date createdAt;
+
+    public ViewUserDTO(String username, Date createdAt)
     {
-        this.username = username;
+        this.username  = username;
+        this.createdAt = createdAt;
     }
 
     public String getUsername()
@@ -19,8 +26,10 @@ public class ViewUserDTO
         this.username = username;
     }
 
-
-
+    public Date getCreationDate()
+    {
+        return createdAt;
+    }
 
 
 }

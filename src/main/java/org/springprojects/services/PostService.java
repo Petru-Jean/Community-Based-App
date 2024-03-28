@@ -17,6 +17,7 @@ import org.springprojects.entities.Community;
 import org.springprojects.entities.Post;
 import org.springprojects.entities.User;
 import org.springprojects.exceptions.NotFoundException;
+import org.springprojects.repositories.CommunityRepository;
 import org.springprojects.repositories.PostRepository;
 
 import java.util.List;
@@ -29,27 +30,25 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class PostService
 {
     private final PostRepository     postRepository;
-    private final CommunityService   communityService;
+    private final CommunityRepository communityRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, CommunityService communityService)
+    public PostService(PostRepository postRepository, CommunityRepository communityRepository)
     {
         this.postRepository   = postRepository;
-        this.communityService = communityService;
+        this.communityRepository = communityRepository;
     }
 
     public ResponseEntity<CollectionModel<EntityModel<ViewPostDTO>>> getPosts(String communityName, int pageNumber)
     {
-        var responseEntity = communityService.getCommunity(communityName);
+        var community = communityRepository.findByName(communityName);
 
-        if(responseEntity == null || responseEntity.getBody() == null || responseEntity.getBody().getContent() == null)
+        if(community == null)
         {
             throw new NotFoundException("Failed to get posts because community '" + communityName + "' does not exist");
         }
 
         Pageable pageable = PageRequest.of(pageNumber, 25);
-
-        Community community = responseEntity.getBody().getContent();
 
         List<ViewPostDTO> postDTOs = PostMapper.INSTANCE.getPostDTOs( postRepository.findAllByCommunityId(community.getId(), pageable) );
 
@@ -64,14 +63,12 @@ public class PostService
 
     public ResponseEntity<EntityModel<CreatePostDTO>> createPost(String communityName, CreatePostDTO postDTO)
     {
-        var communityResponseEntity = communityService.getCommunity(communityName);
+        Community community = communityRepository.findByName(communityName);
 
-        if(communityResponseEntity == null || (communityResponseEntity.getBody()) == null  || communityResponseEntity.getBody().getContent() == null)
+        if(community == null)
         {
             throw new NotFoundException("Post not created because the community '" + communityName + "' does not exist");
         }
-
-        Community community = communityResponseEntity.getBody().getContent();
 
         Post post = PostMapper.INSTANCE.toPost(postDTO);
 

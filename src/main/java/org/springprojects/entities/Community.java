@@ -12,7 +12,7 @@ import org.springprojects.validation.CommunityNameValidation;
 
 
 @Entity
-public class Community
+public class Community extends DateAudit
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
