@@ -3,6 +3,7 @@ package org.springprojects.dto.postDTO;
 import org.springframework.hateoas.server.core.Relation;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
+import org.springprojects.entities.User;
 
 @Relation(collectionRelation = "posts", itemRelation = "post")
 public class ViewPostDTO
@@ -15,7 +16,7 @@ public class ViewPostDTO
     @PostContentValidation
     private String content;
 
-
+    private User user;
     private String externalId;
 
     public ViewPostDTO(String title, String content, String externalId)
@@ -54,5 +55,15 @@ public class ViewPostDTO
     public void setExternalId(String externalId)
     {
         this.externalId = externalId;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
     }
 }
