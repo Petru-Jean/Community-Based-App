@@ -29,7 +29,6 @@ public class PostController
     }
 
     @GetMapping("/posts")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CollectionModel<EntityModel<ViewPostDTO>>> getPosts(@PathVariable String communityName, @RequestParam(required = false) Integer pageNumber)
     {
         return postService.getPosts(communityName, pageNumber == null || pageNumber < 0 ? 0 : pageNumber);
@@ -41,6 +40,7 @@ public class PostController
         return postService.getPost(postURI);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/posts")
     public ResponseEntity<EntityModel<CreatePostDTO>> createPost(@PathVariable String communityName, @Valid @RequestBody CreatePostDTO postDTO)
     {

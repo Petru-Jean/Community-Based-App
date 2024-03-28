@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springprojects.dto.communityDTO.CreateOrViewCommunityDTO;
@@ -18,12 +19,10 @@ import org.springprojects.entities.Community;
 public class CommunityController
 {
     private final CommunityService communityService;
-    private final PostService postService;
 
     @Autowired
-    public CommunityController(PostService postService, CommunityService communityService)
+    public CommunityController(CommunityService communityService)
     {
-        this.postService = postService;
         this.communityService = communityService;
     }
 
@@ -33,16 +32,18 @@ public class CommunityController
         return communityService.getCommunities();
     }
 
-    @PostMapping("/")
-    public ResponseEntity<EntityModel<CreateOrViewCommunityDTO>> createCommunity(@Valid @RequestBody CreateOrViewCommunityDTO community)
-    {
-        return communityService.createCommunity(community);
-    }
-
     @GetMapping("/{communityName}")
     public ResponseEntity<EntityModel<Community>> getCommunity(@PathVariable String communityName)
     {
         return communityService.getCommunity(communityName);
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/")
+    public ResponseEntity<EntityModel<CreateOrViewCommunityDTO>> createCommunity(@Valid @RequestBody CreateOrViewCommunityDTO community)
+    {
+        return communityService.createCommunity(community);
     }
 
 

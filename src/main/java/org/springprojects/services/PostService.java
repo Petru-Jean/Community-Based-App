@@ -104,7 +104,7 @@ public class PostService
                 HttpStatus.OK);
     }
 
-    public ResponseEntity<String> deletePost(int postId)
+    /*public ResponseEntity<String> deletePost(int postId)
     {
         Optional<Post> post = postRepository.findById(postId);
 
@@ -131,6 +131,6 @@ public class PostService
         postRepository.save(post.get());
 
         return new ResponseEntity<>(EntityModel.of(post.get()).add(linkTo(CommunityController.class).slash(post.get().getCommunity().getName()).slash(post.get().getId()).withSelfRel()), HttpStatus.OK);
-    }
+    }*/
 
 }
