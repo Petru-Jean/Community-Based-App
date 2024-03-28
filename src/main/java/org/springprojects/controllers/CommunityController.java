@@ -38,7 +38,6 @@ public class CommunityController
         return communityService.getCommunity(communityName);
     }
 
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/")
     public ResponseEntity<EntityModel<CreateOrViewCommunityDTO>> createCommunity(@Valid @RequestBody CreateOrViewCommunityDTO community)

@@ -47,4 +47,7 @@ public class PostController
         return postService.createPost(communityName, postDTO);
     }
 
+
+
+
 }
