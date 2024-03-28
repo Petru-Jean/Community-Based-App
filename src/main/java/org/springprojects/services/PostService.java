@@ -60,7 +60,7 @@ public class PostService
         model.add(linkTo(CommunityController.class).slash(communityName).slash("posts").withSelfRel());
 
         return new ResponseEntity<>(model, HttpStatus.OK);//, HttpStatus.OK);
-    }   
+    }
 
     public ResponseEntity<EntityModel<CreatePostDTO>> createPost(String communityName, CreatePostDTO postDTO)
     {

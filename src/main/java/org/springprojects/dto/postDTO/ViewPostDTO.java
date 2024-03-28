@@ -1,9 +1,16 @@
 package org.springprojects.dto.postDTO;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.core.Relation;
+import org.springprojects.controllers.CommunityController;
+import org.springprojects.controllers.PostController;
+import org.springprojects.controllers.UserController;
+import org.springprojects.dto.userDTO.ViewUserDTO;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
 import org.springprojects.entities.User;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Relation(collectionRelation = "posts", itemRelation = "post")
 public class ViewPostDTO
@@ -16,7 +23,7 @@ public class ViewPostDTO
     @PostContentValidation
     private String content;
 
-    private User user;
+    private EntityModel<ViewUserDTO> user;
     private String externalId;
 
     public ViewPostDTO(String title, String content, String externalId)
@@ -57,13 +64,14 @@ public class ViewPostDTO
         this.externalId = externalId;
     }
 
-    public User getUser()
+    public EntityModel<ViewUserDTO> getUser()
     {
         return user;
     }
 
-    public void setUser(User user)
+    public void setUser(ViewUserDTO user)
     {
-        this.user = user;
+        this.user = EntityModel.of(user, linkTo(UserController.class).slash(user.getUsername()).withSelfRel());
     }
+
 }
