@@ -77,6 +77,9 @@ public class PostService
         post.setUser( user );
         post.setCommunity(community);
 
+        System.out.println("Obj:  " + post.getCreatedAt());
+        System.out.println("Dto:  " + postDTO.getCreatedAt());
+
         // Temporary solution
         post.setExternalId(UUID.randomUUID().toString().replace("-","").substring(0,8));
 

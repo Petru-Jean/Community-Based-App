@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +15,8 @@ import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostExternalIdValidation;
 import org.springprojects.validation.PostTitleValidation;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -30,13 +34,13 @@ public class Post extends Votable
     @Column(name = "external_id")
     private String externalId;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private Timestamp createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "community_id")
@@ -75,6 +79,26 @@ public class Post extends Votable
     public void setExternalId(String externalId)
     {
         this.externalId = externalId;
+    }
+
+    public Date getCreatedAt()
+    {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt)
+    {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt()
+    {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt)
+    {
+        this.updatedAt = updatedAt;
     }
 
     @Override

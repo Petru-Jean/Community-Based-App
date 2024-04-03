@@ -8,6 +8,7 @@ import org.springprojects.entities.User;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -25,11 +26,9 @@ public class ViewPostDTO
 
     private EntityModel<ViewUserDTO> user;
     private String externalId;
+    private Timestamp createdAt;
 
-    private final Date createdAt;
-
-
-    public ViewPostDTO(String title, String content, String externalId, Date createdAt, ViewUserDTO user)
+    public ViewPostDTO(String title, String content, String externalId, Timestamp createdAt, ViewUserDTO user)
     {
         this.title       = title;
         this.content     = content;
@@ -38,6 +37,10 @@ public class ViewPostDTO
         this.user = EntityModel.of(user, linkTo(UserController.class).slash(user.getUsername()).withSelfRel());
     }
 
+    public void setCreatedAt(Timestamp createdAt)
+    {
+        this.createdAt = createdAt;
+    }
 
     public String getTitle()
     {
@@ -84,4 +87,8 @@ public class ViewPostDTO
         return createdAt;
     }
 
+    public void setUser(EntityModel<ViewUserDTO> user)
+    {
+        this.user = user;
+    }
 }

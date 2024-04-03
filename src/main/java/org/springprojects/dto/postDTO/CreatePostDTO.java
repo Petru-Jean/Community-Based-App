@@ -1,8 +1,16 @@
 package org.springprojects.dto.postDTO;
 
+import jakarta.persistence.EntityListeners;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
+@EntityListeners(AuditingEntityListener.class)
 public class CreatePostDTO
 {
     @PostTitleValidation
@@ -11,10 +19,18 @@ public class CreatePostDTO
     @PostContentValidation
     private String content;
 
-    public CreatePostDTO(String title, String content)
+    private Timestamp createdAt;
+
+    public CreatePostDTO(String title, String content, Timestamp createdAt)
     {
         this.title = title;
         this.content = content;
+        this.createdAt = createdAt;
+    }
+
+    public CreatePostDTO()
+    {
+
     }
 
     public String getTitle()
@@ -37,4 +53,14 @@ public class CreatePostDTO
         this.content = content;
     }
 
+
+    public Date getCreatedAt()
+    {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt)
+    {
+        this.createdAt = createdAt;
+    }
 }

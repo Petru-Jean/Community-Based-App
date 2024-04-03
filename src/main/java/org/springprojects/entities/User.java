@@ -6,13 +6,17 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(schema = "api")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails
 {
     @Id
@@ -29,6 +33,10 @@ public class User implements UserDetails
     @Email
     @JsonIgnore
     private String email;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
 
     public int getId() {
         return id;
