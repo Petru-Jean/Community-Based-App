@@ -4,15 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springprojects.validation.CommunityNameValidation;
 
 
 @Entity
-public class Community extends DateAudit
+@EntityListeners(AuditingEntityListener.class)
+@Table(schema = "api")
+public class Community
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
@@ -27,6 +33,10 @@ public class Community extends DateAudit
     @OneToMany(mappedBy = "community")
     @JsonIgnore
     private List<Post> posts;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
 
     public List<Post> getPosts() {
         return posts;
@@ -58,5 +68,15 @@ public class Community extends DateAudit
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getCreatedAt()
+    {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt)
+    {
+        this.createdAt = createdAt;
     }
 }

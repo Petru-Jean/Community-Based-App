@@ -33,7 +33,7 @@ public class AuthController
     public String createJwtToken() {
         var user = new User();
 
-        user.setId(1);
+        user.setId(2);
         user.setUsername("Mihai");
 
         return jwtService.generateToken(user);

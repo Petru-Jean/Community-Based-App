@@ -2,14 +2,11 @@ package org.springprojects.dto.postDTO;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.core.Relation;
-import org.springprojects.controllers.CommunityController;
-import org.springprojects.controllers.PostController;
 import org.springprojects.controllers.UserController;
 import org.springprojects.dto.userDTO.ViewUserDTO;
-import org.springprojects.entities.DateAudit;
+import org.springprojects.entities.User;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
-import org.springprojects.entities.User;
 
 import java.util.Date;
 
@@ -32,12 +29,13 @@ public class ViewPostDTO
     private final Date createdAt;
 
 
-    public ViewPostDTO(String title, String content, String externalId, Date createdAt)
+    public ViewPostDTO(String title, String content, String externalId, Date createdAt, ViewUserDTO user)
     {
         this.title       = title;
         this.content     = content;
         this.externalId  = externalId;
         this.createdAt   = createdAt;
+        this.user = EntityModel.of(user, linkTo(UserController.class).slash(user.getUsername()).withSelfRel());
     }
 
 

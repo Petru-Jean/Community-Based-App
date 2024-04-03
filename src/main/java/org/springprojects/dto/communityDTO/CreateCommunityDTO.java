@@ -4,10 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.server.core.Relation;
-import org.springprojects.entities.DateAudit;
 import org.springprojects.validation.CommunityNameValidation;
-
-import java.util.Date;
 
 @Relation(collectionRelation = "communities", itemRelation = "community")
 public class CreateCommunityDTO

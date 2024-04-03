@@ -6,18 +6,20 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.boot.context.properties.bind.Name;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostExternalIdValidation;
 import org.springprojects.validation.PostTitleValidation;
 
-@Entity
-public class Post extends DateAudit
-{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private int id;
+import java.util.Date;
 
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@Table(schema = "api")
+public class Post extends Votable
+{
     @PostTitleValidation
     private String title;
 
@@ -28,40 +30,18 @@ public class Post extends DateAudit
     @Column(name = "external_id")
     private String externalId;
 
-    public String getExternalId()
-    {
-        return externalId;
-    }
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
 
-    public void setExternalId(String externalId)
-    {
-        this.externalId = externalId;
-    }
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "community_id")
     @JsonIgnore
     private Community community;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return  title;
@@ -87,15 +67,25 @@ public class Post extends DateAudit
         this.community = community;
     }
 
+    public String getExternalId()
+    {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId)
+    {
+        this.externalId = externalId;
+    }
+
     @Override
     public String toString()
     {
         return "Post{" +
-                "id=" + id +
+                "id=" + super.getId() +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", community=" + community +
-                ", user=" + user +
+                ", user=" + super.getUser() +
                 '}';
     }
 }

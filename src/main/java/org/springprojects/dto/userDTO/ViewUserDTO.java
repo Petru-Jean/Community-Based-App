@@ -1,7 +1,5 @@
 package org.springprojects.dto.userDTO;
 
-import org.springprojects.entities.DateAudit;
-
 import java.util.Date;
 
 public class ViewUserDTO
