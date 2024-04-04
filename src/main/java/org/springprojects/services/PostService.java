@@ -77,9 +77,6 @@ public class PostService
         post.setUser( user );
         post.setCommunity(community);
 
-        System.out.println("Obj:  " + post.getCreatedAt());
-        System.out.println("Dto:  " + postDTO.getCreatedAt());
-
         // Temporary solution
         post.setExternalId(UUID.randomUUID().toString().replace("-","").substring(0,8));
 
@@ -98,6 +95,8 @@ public class PostService
         }
 
         var dto = PostMapper.INSTANCE.toViewPostDTO(post);
+
+        post.getVotes().forEach(vote -> System.out.println(vote.toString()));
 
         return new ResponseEntity<>(
                 EntityModel.of(dto).add(linkTo(CommunityController.class).slash(post.getCommunity().getName()).slash("posts").slash(post.getExternalId()).withSelfRel()),

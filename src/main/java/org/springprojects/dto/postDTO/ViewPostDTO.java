@@ -4,7 +4,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.core.Relation;
 import org.springprojects.controllers.UserController;
 import org.springprojects.dto.userDTO.ViewUserDTO;
-import org.springprojects.entities.User;
 import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostTitleValidation;
 
@@ -26,6 +25,7 @@ public class ViewPostDTO
 
     private EntityModel<ViewUserDTO> user;
     private String externalId;
+
     private Timestamp createdAt;
 
     public ViewPostDTO(String title, String content, String externalId, Timestamp createdAt, ViewUserDTO user)
@@ -82,7 +82,7 @@ public class ViewPostDTO
         this.user = EntityModel.of(user, linkTo(UserController.class).slash(user.getUsername()).withSelfRel());
     }
 
-    private Date getCreatedAt()
+    public Date getCreatedAt()
     {
         return createdAt;
     }

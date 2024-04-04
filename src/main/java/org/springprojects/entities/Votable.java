@@ -3,6 +3,8 @@ package org.springprojects.entities;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "api")
@@ -16,6 +18,15 @@ public class Votable
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany
+    @JoinColumn(name = "votable_id")
+    private List<Vote> votes;
+
+    public Votable()
+    {
+
+    }
 
     public int getId()
     {
@@ -35,5 +46,15 @@ public class Votable
     public void setUser(User user)
     {
         this.user = user;
+    }
+
+    public List<Vote> getVotes()
+    {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes)
+    {
+        this.votes = votes;
     }
 }

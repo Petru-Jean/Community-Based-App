@@ -15,7 +15,7 @@ public class Vote
     @JoinColumn(name = "votable_id")
     private Votable votable;
 
-    @Id
+    @Enumerated(EnumType.STRING)
     @Column(value = "vote_type")
     private VoteType voteType;
 
@@ -41,8 +41,27 @@ public class Vote
 
     public enum VoteType
     {
-        UPVOTE,
-        DOWNVOTE
+        Upvote,
+        Downvote
     }
 
+    @Override
+    public String toString()
+    {
+        return "Vote{" +
+                "id=" + id +
+                ", votable=" + votable +
+                ", voteType=" + voteType +
+                '}';
+    }
+
+    public Votable getVotable()
+    {
+        return votable;
+    }
+
+    public void setVotable(Votable votable)
+    {
+        this.votable = votable;
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 
@@ -36,7 +37,7 @@ public class User implements UserDetails
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private Timestamp createdAt;
 
     public int getId() {
         return id;
@@ -95,6 +96,15 @@ public class User implements UserDetails
         this.email = email;
     }
 
+    public Timestamp getCreatedAt()
+    {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt)
+    {
+        this.createdAt = createdAt;
+    }
 
     @Override
     public String toString()
