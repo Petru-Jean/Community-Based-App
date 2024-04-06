@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.Date;
 @Entity
 @Table(schema = "api")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails
+public class User implements UserDetails, Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,7 +10,6 @@ import org.springprojects.validation.PostTitleValidation;
 import java.sql.Timestamp;
 import java.util.Date;
 
-@EntityListeners(AuditingEntityListener.class)
 public class CreatePostDTO
 {
     @PostTitleValidation
@@ -26,11 +25,6 @@ public class CreatePostDTO
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
-    }
-
-    public CreatePostDTO()
-    {
-
     }
 
     public String getTitle()
@@ -54,7 +48,7 @@ public class CreatePostDTO
     }
 
 
-    public Date getCreatedAt()
+    public Timestamp getCreatedAt()
     {
         return createdAt;
     }

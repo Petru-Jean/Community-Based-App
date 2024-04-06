@@ -20,6 +20,7 @@ import org.springprojects.exceptions.NotFoundException;
 import org.springprojects.repositories.CommunityRepository;
 import org.springprojects.repositories.PostRepository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -80,7 +81,8 @@ public class PostService
         // Temporary solution
         post.setExternalId(UUID.randomUUID().toString().replace("-","").substring(0,8));
 
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        postDTO.setCreatedAt(post.getCreatedAt());
 
         return new ResponseEntity<>(EntityModel.of(postDTO).add(linkTo(CommunityController.class).slash(community.getName()).slash("posts").slash(post.getExternalId()).withSelfRel()), HttpStatus.CREATED);
     }

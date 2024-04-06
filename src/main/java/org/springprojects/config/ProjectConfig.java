@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
-import org.springprojects.filters.JwtAuthFilter;
 import org.springprojects.services.UserService;
 
 import javax.sql.DataSource;
@@ -36,9 +33,6 @@ public class ProjectConfig
         return new JdbcTemplate(dataSource);
     }
 
-    @Autowired
-    private JwtAuthFilter authTokenFilter;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
@@ -47,7 +41,7 @@ public class ProjectConfig
                 .requestMatchers("/error/**").permitAll()*/
                        // .requestMatchers("communities/posts")
                 .anyRequest().permitAll()
-        ).addFilterBefore(authTokenFilter, AuthorizationFilter.class)
+        )//.addFilterBefore(authTokenFilter, AuthorizationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);
 
         http.anonymous(AbstractHttpConfigurer::disable);

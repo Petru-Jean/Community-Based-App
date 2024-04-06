@@ -82,7 +82,7 @@ public class ViewPostDTO
         this.user = EntityModel.of(user, linkTo(UserController.class).slash(user.getUsername()).withSelfRel());
     }
 
-    public Date getCreatedAt()
+    public Timestamp getCreatedAt()
     {
         return createdAt;
     }

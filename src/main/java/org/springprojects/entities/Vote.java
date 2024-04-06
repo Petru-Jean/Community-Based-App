@@ -2,11 +2,12 @@ package org.springprojects.entities;
 import jakarta.persistence.*;
 import org.springframework.data.relational.core.mapping.Column;
 
+import java.io.Serializable;
 import java.lang.annotation.*;
 
 @Entity
 @Table(schema = "api")
-public class Vote
+public class Vote implements Serializable
 {
     @Id
     private int id;

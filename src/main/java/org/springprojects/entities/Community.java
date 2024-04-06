@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +15,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springprojects.validation.CommunityNameValidation;
 
-
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(schema = "api")
-public class Community
+public class Community implements Serializable
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private int id;
 
     @CommunityNameValidation
@@ -30,8 +29,7 @@ public class Community
     @Length(max = 512) @NotNull @NotBlank
     private String description;
 
-    @OneToMany(mappedBy = "community")
-    @JsonIgnore
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
     private List<Post> posts;
 
     @CreatedDate

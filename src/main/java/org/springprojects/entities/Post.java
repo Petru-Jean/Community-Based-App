@@ -15,6 +15,7 @@ import org.springprojects.validation.PostContentValidation;
 import org.springprojects.validation.PostExternalIdValidation;
 import org.springprojects.validation.PostTitleValidation;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -81,7 +82,7 @@ public class Post extends Votable
         this.externalId = externalId;
     }
 
-    public Date getCreatedAt()
+    public Timestamp getCreatedAt()
     {
         return createdAt;
     }
@@ -91,7 +92,7 @@ public class Post extends Votable
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt()
+    public Timestamp getUpdatedAt()
     {
         return updatedAt;
     }
