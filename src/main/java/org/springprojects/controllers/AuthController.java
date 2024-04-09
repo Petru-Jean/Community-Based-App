@@ -1,42 +1,31 @@
 package org.springprojects.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springprojects.entities.User;
-import org.springprojects.services.JwtService;
-import org.springprojects.services.UserService;
-
-import java.util.Objects;
+import org.springprojects.dto.userDTO.LoginUserDTO;
+import org.springprojects.dto.userDTO.RegisterUserDTO;
+import org.springprojects.dto.userDTO.ViewUserDTO;
+import org.springprojects.services.AuthenticationService;
 
 @RequestMapping("/api/v1/auth")
 @RestController
 public class AuthController
 {
-   @Autowired
-   private JwtService jwtService;
+    @Autowired
+    private AuthenticationService authService;
 
-    @GetMapping("/ViewToken/{token}")
-    public String viewJwtToken(@PathVariable String token) {
-        try {
-            return jwtService.auth(token).getUsername();
-        } catch (Exception ex) {
-            return "Invalid JWToken:\n" + ex.getMessage();
-        }
+    @PostMapping("/login")
+    public ResponseEntity<ViewUserDTO> login(@RequestBody @Valid LoginUserDTO dto)
+    {
+        return authService.loginUser(dto);
     }
 
-    @PostMapping("/CreateToken")
-    public String createJwtToken() {
-        var user = new User();
-
-        user.setId(2);
-        user.setUsername("Mihai");
-
-        return jwtService.generateToken(user);
+    @PostMapping("/register")
+    public ResponseEntity<ViewUserDTO> register(@RequestBody @Valid RegisterUserDTO dto)
+    {
+        return authService.registerUser(dto);
     }
 
 

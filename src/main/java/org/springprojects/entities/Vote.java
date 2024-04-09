@@ -20,6 +20,7 @@ public class Vote implements Serializable
     @Column(value = "vote_type")
     private VoteType voteType;
 
+
     public int getId()
     {
         return id;

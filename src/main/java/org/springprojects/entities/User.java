@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springprojects.validation.UsernameValidation;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -26,7 +27,7 @@ public class User implements UserDetails, Serializable
     @JsonIgnore
     private int id;
 
-    @NotNull @NotBlank @Length(min = 3, max = 21)
+    @UsernameValidation
     private String username;
 
     @NotNull @NotBlank

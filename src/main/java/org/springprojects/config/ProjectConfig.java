@@ -8,11 +8,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springprojects.services.UserService;
 
 import javax.sql.DataSource;
@@ -21,6 +23,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @EnableMethodSecurity
 @EnableJpaAuditing
+@EnableRedisHttpSession
 public class ProjectConfig
 {
     /*
@@ -45,6 +48,10 @@ public class ProjectConfig
                 .csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);
 
         http.anonymous(AbstractHttpConfigurer::disable);
+
+        http.sessionManagement(smc -> smc.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        //.sessionCreationPolicy(SessionCreationPolicy.NEVER);
 
         return http.build();
     }

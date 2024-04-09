@@ -13,5 +13,8 @@ public interface UserMapper
     ViewUserDTO map(User user);
     User map(ViewUserDTO dto);
 
+    User map(LoginUserDTO dto);
+    User map(RegisterUserDTO dto);
+
 }
 
