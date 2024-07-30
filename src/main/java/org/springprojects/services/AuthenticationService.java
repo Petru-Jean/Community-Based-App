@@ -36,12 +36,12 @@ public class AuthenticationService
 
         if(repository.findByUsername(dto.getUsername()) != null)
         {
-            throw new HandledException("Username " + dto.getUsername() + " already in use", HttpStatus.UNAUTHORIZED);
+            throw new HandledException("Username " + dto.getUsername() + " already in use", HttpStatus.CONFLICT);
         }
 
         if(repository.findByEmail(dto.getEmail()) != null)
         {
-            throw new HandledException("Email " + dto.getEmail() + " already in use.", HttpStatus.UNAUTHORIZED);
+            throw new HandledException("Email " + dto.getEmail() + " already in use.", HttpStatus.CONFLICT);
         }
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -69,7 +69,6 @@ public class AuthenticationService
         ViewUserDTO viewUserDTO = UserMapper.INSTANCE.map(dbUser);
 
         createSession(dto.getUsername());
-
 
         return new ResponseEntity<>(viewUserDTO, HttpStatus.OK);
     }
